@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "hypercore",
+  "version": "${version}",
+  "name": "HyperCore",
+  "description": "A modular performance diagnostics and optimization framework for Minecraft.",
+  "authors": [
+    "TeamZeroManager"
+  ],
+  "contact": {
+    "sources": "https://github.com/TeamZeroManager/HyperCore"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.teamzeromanager.hypercore.HyperCore"
+    ],
+    "client": [
+      "com.teamzeromanager.hypercore.client.HyperCoreClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
