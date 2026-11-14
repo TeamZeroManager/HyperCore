@@ -23,6 +23,7 @@ The client diagnostics module currently:
 - Records JVM heap usage, committed heap, and maximum heap.
 - Records the processor count visible to the JVM and Java/OS version details.
 - Keeps a rolling in-memory history of the latest 60 samples.
+- Provides an optional diagnostics HUD, toggled with **F8**, showing FPS, JVM heap usage, logical processor count, Java version, and OS details.
 
 See [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) for metric definitions and limitations.
 
@@ -43,7 +44,7 @@ The remapped mod JAR will be generated in `build/libs/`.
 - [x] Establish the initial project structure for Fabric 1.20.1 / Java 17.
 - [x] Add a lightweight client diagnostics sampler and bounded sample history.
 - [ ] Verify the project with a clean Gradle build and in-game launch.
-- [ ] Add a user-facing diagnostics screen or HUD.
+- [x] Add a lightweight, toggleable diagnostics HUD.
 - [ ] Add frame-time statistics using a carefully validated sampling mechanism.
 - [ ] Add optional export of diagnostic snapshots for reproducible comparisons.
 - [ ] Introduce opt-in optimizations, each independently configurable.
