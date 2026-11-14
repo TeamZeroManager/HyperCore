@@ -18,7 +18,7 @@ import org.lwjgl.glfw.GLFW;
  * It does not read GPU temperature or control hardware power directly.
  */
 public final class GpuSaver {
-    private static final int TARGET_FPS = 45;
+    private static final int TARGET_FPS = 50;
     private static final int TARGET_VIEW_DISTANCE = 8;
     private static final double TARGET_ENTITY_DISTANCE = 0.75D;
 
@@ -81,6 +81,7 @@ public final class GpuSaver {
         previousEntityShadows = options.getEntityShadows().getValue();
         previousBiomeBlend = options.getBiomeBlendRadius().getValue();
 
+        // Never raise a lower user-selected cap; 50 FPS is the saver-mode ceiling.
         fps.setValue(Math.min(previousFps, TARGET_FPS));
         viewDistance.setValue(Math.min(previousViewDistance, TARGET_VIEW_DISTANCE));
         entityDistance.setValue(Math.min(previousEntityDistance, TARGET_ENTITY_DISTANCE));
