@@ -18,6 +18,7 @@ public final class FrameTimeMonitor {
     private static final FrameTimeMonitor INSTANCE = new FrameTimeMonitor();
 
     private final double[] samples = new double[HISTORY_SIZE];
+    private final double[] sortedSamples = new double[HISTORY_SIZE];
     private int sampleCount;
     private int nextIndex;
     private long previousFrameNanos;
@@ -69,10 +70,10 @@ public final class FrameTimeMonitor {
         }
         averageFrameTimeMs = total / sampleCount;
 
-        double[] sorted = Arrays.copyOf(samples, sampleCount);
-        Arrays.sort(sorted);
+        System.arraycopy(samples, 0, sortedSamples, 0, sampleCount);
+        Arrays.sort(sortedSamples, 0, sampleCount);
         int percentileIndex = Math.max(0, (int) Math.ceil(sampleCount * 0.95) - 1);
-        percentile95Ms = sorted[percentileIndex];
+        percentile95Ms = sortedSamples[percentileIndex];
         lastStatisticsUpdateNanos = now;
     }
 

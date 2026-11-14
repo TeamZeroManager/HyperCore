@@ -5,6 +5,7 @@ import com.teamzeromanager.hypercore.client.diagnostics.FrameTimeMonitor;
 import com.teamzeromanager.hypercore.client.diagnostics.PerformanceHud;
 import com.teamzeromanager.hypercore.client.diagnostics.PerformanceMonitor;
 import com.teamzeromanager.hypercore.client.diagnostics.SessionLogger;
+import com.teamzeromanager.hypercore.client.optimization.GpuSaver;
 import net.fabricmc.api.ClientModInitializer;
 
 /**
@@ -17,6 +18,7 @@ public final class HyperCoreClient implements ClientModInitializer {
         PerformanceMonitor.register();
         PerformanceHud.register();
         SessionLogger.register();
+        GpuSaver.register();
         HyperCore.LOGGER.info("HyperCore client diagnostics initialized.");
     }
 }

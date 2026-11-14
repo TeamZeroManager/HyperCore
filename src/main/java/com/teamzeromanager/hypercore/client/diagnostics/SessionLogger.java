@@ -1,5 +1,6 @@
 package com.teamzeromanager.hypercore.client.diagnostics;
 
+import com.teamzeromanager.hypercore.client.optimization.GpuSaver;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -111,7 +112,7 @@ public final class SessionLogger {
                     .forEach(this::writeMod);
             writeLine("");
             writeLine("MUESTRAS (una por segundo aprox.)");
-            writeLine("fecha_hora | tiempo_s | fps | frame_ms_ultimo | frame_ms_media_ventana"
+            writeLine("fecha_hora | tiempo_s | fps | limite_fps | vsync | distancia_render | distancia_entidades | gpu_saver | frame_ms_ultimo | frame_ms_media_ventana"
                     + " | frame_ms_p95_ventana | heap_usado_mib | heap_comprometido_mib | heap_maximo_mib");
             writer.flush();
         } catch (IOException exception) {
@@ -130,6 +131,11 @@ public final class SessionLogger {
         long usedBytes = runtime.totalMemory() - runtime.freeMemory();
         double usedMiB = toMiB(usedBytes);
         int fps = client.getCurrentFps();
+        String gpuSaverState = GpuSaver.isEnabled() ? "ON" : "OFF";
+        int fpsLimit = client.options.getMaxFps().getValue();
+        boolean vsync = client.options.getEnableVsync().getValue();
+        int renderDistance = client.options.getViewDistance().getValue();
+        double entityDistance = client.options.getEntityDistanceScaling().getValue();
         FrameTimeMonitor frameMonitor = FrameTimeMonitor.getInstance();
         double latestFrame = frameMonitor.getLatestFrameTimeMs();
         double averageFrame = frameMonitor.getAverageFrameTimeMs();
@@ -145,6 +151,11 @@ public final class SessionLogger {
         writeLine(DISPLAY_TIME.format(Instant.now())
                 + " | " + format(elapsedSeconds)
                 + " | " + fps
+                + " | " + fpsLimit
+                + " | " + (vsync ? "ON" : "OFF")
+                + " | " + renderDistance
+                + " | " + format(entityDistance)
+                + " | " + gpuSaverState
                 + " | " + format(latestFrame)
                 + " | " + format(averageFrame)
                 + " | " + format(percentile95)

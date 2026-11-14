@@ -25,7 +25,7 @@ A session starts automatically when the client enters a world and ends when the 
 
 - Writes the session start time, singleplayer/multiplayer mode, initial dimension, Java/OS information, available processor count, and maximum JVM heap.
 - Lists detected mod IDs and versions, which helps identify the modpack and investigate compatibility.
-- Appends a performance sample approximately once per second: timestamp, elapsed session time, FPS, latest frame interval, rolling frame-time average and p95, and JVM heap used/committed/maximum.
+- Appends a performance sample approximately once per second: timestamp, elapsed session time, FPS, configured FPS limit, VSync state, render distance, entity render distance, GPU saver ON/OFF state, latest frame interval, rolling frame-time average and p95, and JVM heap used/committed/maximum.
 - Writes a closing summary with duration, sample count, average/minimum/maximum sampled FPS, and maximum observed used heap.
 - Flushes every sample to disk. If Minecraft crashes or is forcibly terminated, earlier samples should remain available, but the closing summary will be missing.
 
@@ -39,8 +39,8 @@ The file is plain text and can be opened with Notepad. Share the complete report
 - FPS and JVM samples are collected on the client tick event, not on every rendered frame.
 - Frame time is measured between Fabric HUD render callbacks and stored as a rolling window of up to 120 intervals. It approximates frame pacing from the client render loop; it is not a GPU timer and does not isolate rendering, driver, or display latency.
 - The logged frame-time average and p95 are rolling-window values at each sample, not whole-session percentiles.
-- The HUD refreshes the average and 95th-percentile frame interval at most four times per second to keep diagnostic overhead low.
-- The logger does not change graphics settings, garbage-collect, or modify world data.
+- The HUD refreshes its cached display twice per second and reuses text/layout between frames. The average and 95th-percentile frame interval are refreshed at most four times per second. The percentile calculation reuses a fixed-size buffer to avoid periodic array allocations.
+- When GPU saver is disabled, it restores only settings that still match the values applied by the preset. If the player changes an option while the preset is active, HyperCore keeps that manual change instead of overwriting it.\n- The logger does not change graphics settings, garbage-collect, or modify world data.
 - Session reports do not by themselves prove that HyperCore improved performance. For a valid before/after comparison, repeat the same route or activity, world, graphics settings, render distance, mod list, and approximate warm-up period with and without the optimization being evaluated.
 
 ## Current HUD
@@ -52,3 +52,12 @@ Press **F8** to show or hide the diagnostics panel. It displays the latest sampl
 1. Establish baseline test scenarios before implementing automatic optimizations.
 2. Add optional machine-level metrics where reliable cross-platform measurements are available.
 3. Test compatibility and stability against a documented mod matrix.
+
+
+## GPU saver recovery
+
+Before changing video options, GPU saver writes the original values to `<config directory>/hypercore/gpu-saver-backup.properties`. The backup is written through a temporary file and an atomic move when the filesystem supports it.
+
+When the preset is disabled, HyperCore restores only options that still match the values applied by the preset. Manual changes made while the preset is active are preserved. If Minecraft exits or crashes before the preset is disabled, HyperCore attempts the same safe restoration on the first client tick after options load on the next launch.
+
+If the recovery file is malformed, cannot be read, or cannot be removed, GPU saver is blocked for that launch and a diagnostic is written to the game log rather than silently overwriting settings. This recovery path still requires in-game crash/restart testing.
