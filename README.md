@@ -21,7 +21,7 @@ The project follows three principles:
 - Records JVM heap usage, committed heap, and maximum heap.
 - Records processor count visible to the JVM and Java/OS details.
 - Keeps a rolling in-memory history of the latest 60 samples.
-- Provides an optional diagnostics HUD, toggled with **F8**.
+- Provides an optional diagnostics HUD, toggled with **F8**; its text and layout are cached on client ticks rather than rebuilt every rendered frame.
 - Measures rolling HUD render intervals (latest, average, p95); these are not direct GPU timings.
 - Creates a text report for each world session in `<game directory>/hypercore/sessions/`, sampling approximately once per second.
 - Includes detected mod IDs and versions in each report.
