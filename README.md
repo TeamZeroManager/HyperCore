@@ -36,7 +36,7 @@ Press **F7** to toggle the optional, reversible GPU-oriented preset:
 - Reduces entity render distance to **75% maximum**.
 - Sets graphics to Fast, clouds off, particles to Minimal, ambient occlusion off, and entity shadows off.
 - Sets biome blend radius to 0.
-- Saves the previous values and restores them when the preset is disabled.
+- Saves the previous values to a recovery file before changing settings.\n- Restores only settings that still match the preset, preserving manual changes made while it is active.\n- Recovers the previous settings on the next launch if Minecraft closed or crashed while the preset was active.
 
 The preset uses Minecraft 1.20.1's public GameOptions API. It reduces client rendering workload but does not read GPU temperatures, change GPU voltage/clock speeds, or guarantee a specific temperature reduction. It cannot directly override shader-pack settings or every renderer-specific option; test with the exact Sodium/Iris configuration.
 
@@ -61,7 +61,7 @@ The remapped mod JAR will be generated in `build/libs/`.
 - [x] Add a toggleable diagnostics HUD and rolling frame-time statistics.
 - [x] Add automatic per-world text reports.
 - [x] Add an opt-in, reversible GPU saver preset for core vanilla graphics options.
-- [ ] Verify the latest code with a clean Gradle build and in-game launch.
+- [x] Verify a clean Gradle build in GitHub Actions for the GPU saver branch.\n- [ ] Verify crash recovery and manual-change preservation in an in-game test.
 - [ ] Establish repeatable baseline scenarios and compare results with/without each optimization.
 - [ ] Investigate renderer-specific optimization hooks for Sodium/Iris before adding invasive mixins.
 
