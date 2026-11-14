@@ -2,7 +2,6 @@ package com.teamzeromanager.hypercore.client.diagnostics;
 
 import com.teamzeromanager.hypercore.client.optimization.GpuSaver;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
