@@ -51,6 +51,7 @@ public final class PerformanceHud {
 
         MinecraftClient client = MinecraftClient.getInstance();
         PerformanceSnapshot snapshot = PerformanceMonitor.getInstance().getLatestSnapshot();
+        FrameTimeMonitor frameTimes = FrameTimeMonitor.getInstance();
         if (snapshot == null) {
             drawLines(context, client, new String[] {
                     "HyperCore",
@@ -62,6 +63,9 @@ public final class PerformanceHud {
         String[] lines = {
                 "HyperCore Diagnostics",
                 "FPS: " + snapshot.framesPerSecond(),
+                String.format(java.util.Locale.ROOT, "Frame time: %.2f ms", frameTimes.getLatestFrameTimeMs()),
+                String.format(java.util.Locale.ROOT, "Average: %.2f ms | 95th: %.2f ms",
+                        frameTimes.getAverageFrameTimeMs(), frameTimes.get95thPercentileMs()),
                 String.format(
                         java.util.Locale.ROOT,
                         "Memory: %.0f / %.0f MiB",
