@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -42,8 +41,6 @@ public final class SessionLogger {
     private int minFps = Integer.MAX_VALUE;
     private int maxFps;
     private double maxHeapUsedMiB;
-    private String sessionMode = "unknown";
-    private String dimension = "unknown";
 
     private SessionLogger() {
     }
@@ -96,19 +93,17 @@ public final class SessionLogger {
             maxFps = 0;
             maxHeapUsedMiB = 0.0;
             ticksSinceSample = 0;
-            sessionMode = client.isInSingleplayer() ? "Singleplayer" : "Multiplayer";
-            dimension = client.world.getRegistryKey().getValue().toString();
 
             writeLine("HYPERCORE - INFORME DE SESION");
             writeLine("Inicio: " + DISPLAY_TIME.format(sessionStart));
-            writeLine("Modo: " + sessionMode);
-            writeLine("Dimension inicial: " + dimension);
+            writeLine("Modo: " + (client.isInSingleplayer() ? "Singleplayer" : "Multiplayer"));
+            writeLine("Dimension inicial: " + client.world.getRegistryKey().getValue());
             writeLine("Minecraft: 1.20.1");
             writeLine("Java: " + System.getProperty("java.version", "unknown"));
             writeLine("Sistema operativo: " + System.getProperty("os.name", "unknown")
                     + " " + System.getProperty("os.version", "unknown"));
             writeLine("Procesadores visibles para Java: " + Runtime.getRuntime().availableProcessors());
-            writeLine("Heap maximo JVM (MiB): " + toMiB(Runtime.getRuntime().maxMemory()));
+            writeLine("Heap maximo JVM (MiB): " + format(toMiB(Runtime.getRuntime().maxMemory())));
             writeLine("");
             writeLine("MODS DETECTADOS (id | version)");
             FabricLoader.getInstance().getAllMods().stream()
@@ -122,7 +117,6 @@ public final class SessionLogger {
         } catch (IOException exception) {
             closeWriterQuietly();
             activeFile = null;
-            net.fabricmc.loader.api.FabricLoader.getInstance();
             System.err.println("[HyperCore] No se pudo iniciar el registro de sesion: " + exception.getMessage());
         }
     }
@@ -189,10 +183,11 @@ public final class SessionLogger {
         } else {
             writeLine("No se alcanzaron a registrar muestras de rendimiento.");
         }
+
+        Path completedFile = activeFile;
         closeWriterQuietly();
-        System.out.println("[HyperCore] Informe de sesion guardado en: " + activeFile);
-        writer = null;
         activeFile = null;
+        System.out.println("[HyperCore] Informe de sesion guardado en: " + completedFile);
     }
 
     private void writeLine(String line) {
