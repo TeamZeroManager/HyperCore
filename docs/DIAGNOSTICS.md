@@ -25,7 +25,7 @@ A session starts automatically when the client enters a world and ends when the 
 
 - Writes the session start time, singleplayer/multiplayer mode, initial dimension, Java/OS information, available processor count, and maximum JVM heap.
 - Lists detected mod IDs and versions, which helps identify the modpack and investigate compatibility.
-- Appends a performance sample approximately once per second: timestamp, elapsed session time, FPS, GPU saver ON/OFF state, latest frame interval, rolling frame-time average and p95, and JVM heap used/committed/maximum.
+- Appends a performance sample approximately once per second: timestamp, elapsed session time, FPS, configured FPS limit, VSync state, render distance, entity render distance, GPU saver ON/OFF state, latest frame interval, rolling frame-time average and p95, and JVM heap used/committed/maximum.
 - Writes a closing summary with duration, sample count, average/minimum/maximum sampled FPS, and maximum observed used heap.
 - Flushes every sample to disk. If Minecraft crashes or is forcibly terminated, earlier samples should remain available, but the closing summary will be missing.
 
