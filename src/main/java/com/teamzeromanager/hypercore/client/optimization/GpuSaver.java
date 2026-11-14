@@ -313,6 +313,7 @@ public final class GpuSaver {
     ) {
         private Properties toProperties() {
             Properties properties = new Properties();
+            properties.setProperty("formatVersion", "1");
             properties.setProperty("fps", Integer.toString(fps));
             properties.setProperty("viewDistance", Integer.toString(viewDistance));
             properties.setProperty("entityDistance", Double.toString(entityDistance));
@@ -326,17 +327,39 @@ public final class GpuSaver {
         }
 
         private static SettingsSnapshot from(Properties properties) {
+            if (!"1".equals(required(properties, "formatVersion"))) {
+                throw new IllegalArgumentException("Unsupported recovery file version");
+            }
+
+            int fps = Integer.parseInt(required(properties, "fps"));
+            int viewDistance = Integer.parseInt(required(properties, "viewDistance"));
+            double entityDistance = Double.parseDouble(required(properties, "entityDistance"));
+            int biomeBlend = Integer.parseInt(required(properties, "biomeBlend"));
+
+            if (fps <= 0 || viewDistance <= 0 || !Double.isFinite(entityDistance)
+                    || entityDistance <= 0.0D || biomeBlend < 0) {
+                throw new IllegalArgumentException("Invalid numeric value in recovery file");
+            }
+
             return new SettingsSnapshot(
-                    Integer.parseInt(required(properties, "fps")),
-                    Integer.parseInt(required(properties, "viewDistance")),
-                    Double.parseDouble(required(properties, "entityDistance")),
+                    fps,
+                    viewDistance,
+                    entityDistance,
                     CloudRenderMode.valueOf(required(properties, "cloudMode")),
                     GraphicsMode.valueOf(required(properties, "graphicsMode")),
                     ParticlesMode.valueOf(required(properties, "particlesMode")),
-                    Boolean.parseBoolean(required(properties, "ambientOcclusion")),
-                    Boolean.parseBoolean(required(properties, "entityShadows")),
-                    Integer.parseInt(required(properties, "biomeBlend"))
+                    parseBoolean(properties, "ambientOcclusion"),
+                    parseBoolean(properties, "entityShadows"),
+                    biomeBlend
             );
+        }
+
+        private static boolean parseBoolean(Properties properties, String key) {
+            String value = required(properties, key);
+            if (!"true".equalsIgnoreCase(value) && !"false".equalsIgnoreCase(value)) {
+                throw new IllegalArgumentException("Invalid boolean recovery property: " + key);
+            }
+            return Boolean.parseBoolean(value);
         }
 
         private static String required(Properties properties, String key) {
