@@ -3,5 +3,8 @@
   "key.hypercore.toggle_gpu_saver": "Activar o desactivar el ahorro para GPU",
   "category.hypercore": "HyperCore",
   "message.hypercore.gpu_saver_enabled": "Ahorro GPU activado: máximo 50 FPS, 8 chunks, gráficos rápidos, partículas mínimas, nubes/sombras/oclusión ambiental desactivadas.",
-  "message.hypercore.gpu_saver_disabled": "Ahorro GPU desactivado: se restauraron los ajustes no modificados; se conservaron tus cambios manuales."
+  "message.hypercore.gpu_saver_disabled": "Ahorro GPU desactivado: se restauraron los ajustes no modificados; se conservaron tus cambios manuales.",
+  "message.hypercore.gpu_saver_backup_failed": "No se activó el ahorro GPU porque no se pudo guardar la copia de recuperación.",
+  "message.hypercore.gpu_saver_recovered": "HyperCore recuperó tus ajustes gráficos anteriores tras una sesión interrumpida.",
+  "message.hypercore.gpu_saver_recovery_failed": "El ahorro GPU está temporalmente bloqueado porque no se pudo leer o eliminar el archivo de recuperación. Revisa el registro del juego."
 }
