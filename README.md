@@ -25,12 +25,13 @@ The project follows three principles:
 - Measures rolling HUD render intervals (latest, average, p95); these are not direct GPU timings.
 - Creates a text report for each world session in `<game directory>/hypercore/sessions/`, sampling approximately once per second.
 - Includes detected mod IDs and versions in each report.
+- Records whether the HyperCore GPU saver is enabled on every performance sample, making before/after test segments easier to identify.
 
 ## GPU saver preset
 
 Press **F7** to toggle the optional, reversible GPU-oriented preset:
 
-- Caps Minecraft at **45 FPS** (or keeps a lower existing cap).
+- Caps Minecraft at **50 FPS maximum** (or keeps a lower existing cap).
 - Reduces render distance to **8 chunks maximum**.
 - Reduces entity render distance to **75% maximum**.
 - Sets graphics to Fast, clouds off, particles to Minimal, ambient occlusion off, and entity shadows off.
