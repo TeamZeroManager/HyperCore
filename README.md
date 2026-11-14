@@ -33,9 +33,11 @@ Press **F7** to toggle the optional, reversible GPU-oriented preset:
 - Caps Minecraft at **45 FPS** (or keeps a lower existing cap).
 - Reduces render distance to **8 chunks maximum**.
 - Reduces entity render distance to **75% maximum**.
+- Sets graphics to Fast, clouds off, particles to Minimal, ambient occlusion off, and entity shadows off.
+- Sets biome blend radius to 0.
 - Saves the previous values and restores them when the preset is disabled.
 
-This preset reduces rendering workload; it does not read GPU temperatures, change GPU voltage/clock speeds, or guarantee a specific temperature reduction. It changes Minecraft's standard video options and should be tested with the user's renderer/mod combination (including Sodium/Iris).
+The preset uses Minecraft 1.20.1's public GameOptions API. It reduces client rendering workload but does not read GPU temperatures, change GPU voltage/clock speeds, or guarantee a specific temperature reduction. It cannot directly override shader-pack settings or every renderer-specific option; test with the exact Sodium/Iris configuration.
 
 See [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) for metric definitions, report format, and limitations.
 
@@ -57,9 +59,9 @@ The remapped mod JAR will be generated in `build/libs/`.
 - [x] Add lightweight client diagnostics and a bounded sample history.
 - [x] Add a toggleable diagnostics HUD and rolling frame-time statistics.
 - [x] Add automatic per-world text reports.
-- [x] Add an opt-in, reversible GPU saver preset.
+- [x] Add an opt-in, reversible GPU saver preset for core vanilla graphics options.
 - [ ] Verify the latest code with a clean Gradle build and in-game launch.
 - [ ] Establish repeatable baseline scenarios and compare results with/without each optimization.
-- [ ] Expand GPU/render optimizations only when their impact and compatibility can be measured.
+- [ ] Investigate renderer-specific optimization hooks for Sodium/Iris before adding invasive mixins.
 
 HyperCore will not claim FPS or temperature improvements without repeatable measurements.
