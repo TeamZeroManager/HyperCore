@@ -32,7 +32,7 @@ public final class PerformanceHud {
                 "key.hypercore.toggle_hud",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_F8,
-                "category.hypercore"
+                "key.categories.hypercore"
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
