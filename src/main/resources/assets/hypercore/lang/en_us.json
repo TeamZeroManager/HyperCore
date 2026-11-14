@@ -3,5 +3,8 @@
   "key.hypercore.toggle_gpu_saver": "Toggle GPU saver",
   "category.hypercore": "HyperCore",
   "message.hypercore.gpu_saver_enabled": "HyperCore GPU saver enabled: up to 50 FPS, 8 chunks, fast graphics, minimal particles, clouds/shadows/AO off.",
-  "message.hypercore.gpu_saver_disabled": "HyperCore GPU saver disabled: unchanged preset settings restored; your manual changes were kept."
+  "message.hypercore.gpu_saver_disabled": "HyperCore GPU saver disabled: unchanged preset settings restored; your manual changes were kept.",
+  "message.hypercore.gpu_saver_backup_failed": "GPU saver was not enabled because its recovery backup could not be saved.",
+  "message.hypercore.gpu_saver_recovered": "HyperCore recovered your previous video settings after an interrupted session.",
+  "message.hypercore.gpu_saver_recovery_failed": "GPU saver is temporarily unavailable because its recovery file could not be read or removed. Check the game log."
 }
