@@ -3,5 +3,5 @@
   "key.hypercore.toggle_gpu_saver": "Toggle GPU saver",
   "category.hypercore": "HyperCore",
   "message.hypercore.gpu_saver_enabled": "HyperCore GPU saver enabled: up to 50 FPS, 8 chunks, fast graphics, minimal particles, clouds/shadows/AO off.",
-  "message.hypercore.gpu_saver_disabled": "HyperCore GPU saver disabled: previous video settings restored."
+  "message.hypercore.gpu_saver_disabled": "HyperCore GPU saver disabled: unchanged preset settings restored; your manual changes were kept."
 }
