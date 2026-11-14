@@ -100,15 +100,39 @@ public final class GpuSaver {
     private static void restore(MinecraftClient client) {
         GameOptions options = client.options;
 
-        if (previousFps != null) options.getMaxFps().setValue(previousFps);
-        if (previousViewDistance != null) options.getViewDistance().setValue(previousViewDistance);
-        if (previousEntityDistance != null) options.getEntityDistanceScaling().setValue(previousEntityDistance);
-        if (previousCloudMode != null) options.getCloudRenderMode().setValue(previousCloudMode);
-        if (previousGraphicsMode != null) options.getGraphicsMode().setValue(previousGraphicsMode);
-        if (previousParticlesMode != null) options.getParticles().setValue(previousParticlesMode);
-        if (previousAmbientOcclusion != null) options.getAo().setValue(previousAmbientOcclusion);
-        if (previousEntityShadows != null) options.getEntityShadows().setValue(previousEntityShadows);
-        if (previousBiomeBlend != null) options.getBiomeBlendRadius().setValue(previousBiomeBlend);
+        // Restore only values that still match the preset. If the player changed
+        // an option while saver mode was active, keep that newer choice.
+        if (previousFps != null
+                && options.getMaxFps().getValue() == Math.min(previousFps, TARGET_FPS)) {
+            options.getMaxFps().setValue(previousFps);
+        }
+        if (previousViewDistance != null
+                && options.getViewDistance().getValue() == Math.min(previousViewDistance, TARGET_VIEW_DISTANCE)) {
+            options.getViewDistance().setValue(previousViewDistance);
+        }
+        if (previousEntityDistance != null
+                && Double.compare(options.getEntityDistanceScaling().getValue(),
+                Math.min(previousEntityDistance, TARGET_ENTITY_DISTANCE)) == 0) {
+            options.getEntityDistanceScaling().setValue(previousEntityDistance);
+        }
+        if (previousCloudMode != null && options.getCloudRenderMode().getValue() == CloudRenderMode.OFF) {
+            options.getCloudRenderMode().setValue(previousCloudMode);
+        }
+        if (previousGraphicsMode != null && options.getGraphicsMode().getValue() == GraphicsMode.FAST) {
+            options.getGraphicsMode().setValue(previousGraphicsMode);
+        }
+        if (previousParticlesMode != null && options.getParticles().getValue() == ParticlesMode.MINIMAL) {
+            options.getParticles().setValue(previousParticlesMode);
+        }
+        if (previousAmbientOcclusion != null && !options.getAo().getValue()) {
+            options.getAo().setValue(previousAmbientOcclusion);
+        }
+        if (previousEntityShadows != null && !options.getEntityShadows().getValue()) {
+            options.getEntityShadows().setValue(previousEntityShadows);
+        }
+        if (previousBiomeBlend != null && options.getBiomeBlendRadius().getValue() == 0) {
+            options.getBiomeBlendRadius().setValue(previousBiomeBlend);
+        }
 
         enabled = false;
         options.write();
