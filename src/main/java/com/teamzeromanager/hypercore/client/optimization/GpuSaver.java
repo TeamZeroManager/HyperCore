@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
-import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 /**
