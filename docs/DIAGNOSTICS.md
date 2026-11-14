@@ -52,3 +52,12 @@ Press **F8** to show or hide the diagnostics panel. It displays the latest sampl
 1. Establish baseline test scenarios before implementing automatic optimizations.
 2. Add optional machine-level metrics where reliable cross-platform measurements are available.
 3. Test compatibility and stability against a documented mod matrix.
+
+
+## GPU saver recovery
+
+Before changing video options, GPU saver writes the original values to `<config directory>/hypercore/gpu-saver-backup.properties`. The backup is written through a temporary file and an atomic move when the filesystem supports it.
+
+When the preset is disabled, HyperCore restores only options that still match the values applied by the preset. Manual changes made while the preset is active are preserved. If Minecraft exits or crashes before the preset is disabled, HyperCore attempts the same safe restoration on the first client tick after options load on the next launch.
+
+If the recovery file is malformed, cannot be read, or cannot be removed, GPU saver is blocked for that launch and a diagnostic is written to the game log rather than silently overwriting settings. This recovery path still requires in-game crash/restart testing.
