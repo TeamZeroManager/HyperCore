@@ -9,6 +9,7 @@ import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.ParticlesMode;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -40,6 +41,7 @@ public final class GpuSaver {
     public static void register() {
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.hypercore.toggle_gpu_saver",
+                InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_F7,
                 "key.categories.hypercore"
         ));
