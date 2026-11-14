@@ -2,6 +2,7 @@ package com.teamzeromanager.hypercore.client;
 
 import com.teamzeromanager.hypercore.HyperCore;
 import com.teamzeromanager.hypercore.client.diagnostics.PerformanceMonitor;
+import com.teamzeromanager.hypercore.client.diagnostics.FrameTimeMonitor;
 import com.teamzeromanager.hypercore.client.diagnostics.PerformanceHud;
 import net.fabricmc.api.ClientModInitializer;
 
@@ -11,6 +12,7 @@ import net.fabricmc.api.ClientModInitializer;
 public final class HyperCoreClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        FrameTimeMonitor.register();
         PerformanceMonitor.register();
         PerformanceHud.register();
         HyperCore.LOGGER.info("HyperCore client diagnostics initialized.");
