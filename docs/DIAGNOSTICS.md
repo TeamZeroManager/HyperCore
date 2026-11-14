@@ -40,7 +40,7 @@ The file is plain text and can be opened with Notepad. Share the complete report
 - Frame time is measured between Fabric HUD render callbacks and stored as a rolling window of up to 120 intervals. It approximates frame pacing from the client render loop; it is not a GPU timer and does not isolate rendering, driver, or display latency.
 - The logged frame-time average and p95 are rolling-window values at each sample, not whole-session percentiles.
 - The HUD refreshes the average and 95th-percentile frame interval at most four times per second to keep diagnostic overhead low.
-- The logger does not change graphics settings, garbage-collect, or modify world data.
+- When GPU saver is disabled, it restores only settings that still match the values applied by the preset. If the player changes an option while the preset is active, HyperCore keeps that manual change instead of overwriting it.\n- The logger does not change graphics settings, garbage-collect, or modify world data.
 - Session reports do not by themselves prove that HyperCore improved performance. For a valid before/after comparison, repeat the same route or activity, world, graphics settings, render distance, mod list, and approximate warm-up period with and without the optimization being evaluated.
 
 ## Current HUD
