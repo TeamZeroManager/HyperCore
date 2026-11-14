@@ -30,4 +30,11 @@ jobs:
           gradle-version: '8.7'
 
       - name: Build mod
-        run: gradle build --no-daemon
+        run: gradle build --no-daemon --stacktrace
+
+      - name: Upload mod JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: hypercore-${{ github.sha }}
+          path: build/libs/*.jar
+          if-no-files-found: error
