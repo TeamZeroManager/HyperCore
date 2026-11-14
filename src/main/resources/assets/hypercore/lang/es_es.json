@@ -1,4 +1,7 @@
 {
   "key.hypercore.toggle_hud": "Mostrar u ocultar el panel de HyperCore",
-  "category.hypercore": "HyperCore"
+  "key.hypercore.toggle_gpu_saver": "Activar o desactivar el ahorro para GPU",
+  "key.categories.hypercore": "HyperCore",
+  "message.hypercore.gpu_saver_enabled": "Ahorro GPU activado: límite de 45 FPS, hasta 8 chunks y 75 % de distancia de entidades.",
+  "message.hypercore.gpu_saver_disabled": "Ahorro GPU desactivado: se restauraron los ajustes gráficos anteriores."
 }
