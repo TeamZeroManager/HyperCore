@@ -13,7 +13,18 @@ The project is being built around three principles:
 - Minecraft: 1.20.1
 - Mod loader: Fabric
 - Java: 17
-- Project status: initial development scaffold
+- Project status: diagnostics foundation in development
+
+## Current diagnostics
+
+The client diagnostics module currently:
+
+- Samples Minecraft-reported FPS every 20 client ticks.
+- Records JVM heap usage, committed heap, and maximum heap.
+- Records the processor count visible to the JVM and Java/OS version details.
+- Keeps a rolling in-memory history of the latest 60 samples.
+
+See [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) for metric definitions and limitations.
 
 ## Development
 
@@ -29,9 +40,12 @@ The remapped mod JAR will be generated in `build/libs/`.
 
 ## Roadmap
 
-- [ ] Establish a reproducible baseline and diagnostics layer.
-- [ ] Collect client performance metrics without expensive per-frame work.
-- [ ] Add hardware and runtime profiling.
+- [x] Establish the initial project structure for Fabric 1.20.1 / Java 17.
+- [x] Add a lightweight client diagnostics sampler and bounded sample history.
+- [ ] Verify the project with a clean Gradle build and in-game launch.
+- [ ] Add a user-facing diagnostics screen or HUD.
+- [ ] Add frame-time statistics using a carefully validated sampling mechanism.
+- [ ] Add optional export of diagnostic snapshots for reproducible comparisons.
 - [ ] Introduce opt-in optimizations, each independently configurable.
 - [ ] Test compatibility and stability against a documented mod matrix.
 
