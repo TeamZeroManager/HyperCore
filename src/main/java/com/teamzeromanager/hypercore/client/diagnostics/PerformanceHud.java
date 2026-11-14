@@ -26,7 +26,7 @@ public final class PerformanceHud {
     private static boolean visible;
     private static KeyBinding toggleKey;
     private static int ticksSinceRefresh;
-    private static String[] cachedLines = {"HyperCore", "Collecting first sample..."};
+    private static Text[] cachedTexts = {Text.literal("HyperCore"), Text.literal("Collecting first sample...")};
     private static int cachedWidth;
     private static int cachedHeight;
 
@@ -63,9 +63,10 @@ public final class PerformanceHud {
         FrameTimeMonitor frameTimes = FrameTimeMonitor.getInstance();
 
         if (snapshot == null) {
-            cachedLines = new String[] {"HyperCore", "Collecting first sample..."};
+            String[] lines = {"HyperCore", "Collecting first sample..."};
+            cacheLines(client, lines);
         } else {
-            cachedLines = new String[] {
+            String[] lines = {
                     "HyperCore Diagnostics",
                     "FPS: " + snapshot.framesPerSecond(),
                     String.format(java.util.Locale.ROOT, "Frame time: %.2f ms",
@@ -78,14 +79,19 @@ public final class PerformanceHud {
                     "Java: " + snapshot.javaVersion(),
                     "OS: " + snapshot.operatingSystem() + " " + snapshot.operatingSystemVersion()
             };
+            cacheLines(client, lines);
         }
+    }
 
+    private static void cacheLines(MinecraftClient client, String[] lines) {
+        cachedTexts = new Text[lines.length];
         int width = 0;
-        for (String line : cachedLines) {
-            width = Math.max(width, client.textRenderer.getWidth(line));
+        for (int i = 0; i < lines.length; i++) {
+            cachedTexts[i] = Text.literal(lines[i]);
+            width = Math.max(width, client.textRenderer.getWidth(lines[i]));
         }
         cachedWidth = width + 12;
-        cachedHeight = cachedLines.length * LINE_HEIGHT + 8;
+        cachedHeight = cachedTexts.length * LINE_HEIGHT + 8;
     }
 
     private static void render(DrawContext context, float tickDelta) {
@@ -96,10 +102,10 @@ public final class PerformanceHud {
         context.fill(LEFT, TOP, LEFT + cachedWidth, TOP + cachedHeight, PANEL_COLOR);
         MinecraftClient client = MinecraftClient.getInstance();
 
-        for (int i = 0; i < cachedLines.length; i++) {
+        for (int i = 0; i < cachedTexts.length; i++) {
             context.drawTextWithShadow(
                     client.textRenderer,
-                    Text.literal(cachedLines[i]),
+                    cachedTexts[i],
                     LEFT + 6,
                     TOP + 4 + i * LINE_HEIGHT,
                     TEXT_COLOR
