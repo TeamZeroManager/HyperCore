@@ -2,6 +2,6 @@
   "key.hypercore.toggle_hud": "Toggle HyperCore diagnostics",
   "key.hypercore.toggle_gpu_saver": "Toggle GPU saver",
   "key.categories.hypercore": "HyperCore",
-  "message.hypercore.gpu_saver_enabled": "HyperCore GPU saver enabled: 45 FPS cap, up to 8 chunks, 75% entity distance.",
+  "message.hypercore.gpu_saver_enabled": "HyperCore GPU saver enabled: 45 FPS, 8 chunks, fast graphics, minimal particles, clouds/shadows/AO off.",
   "message.hypercore.gpu_saver_disabled": "HyperCore GPU saver disabled: previous video settings restored."
 }
