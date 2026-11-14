@@ -6,11 +6,14 @@ import net.minecraft.client.gui.DrawContext;
 import java.util.Arrays;
 
 /**
- * Measures time between HUD render callbacks as an approximation of displayed
- * frame intervals. Values are in milliseconds and are not GPU-only timings.
+ * Measures intervals between HUD render callbacks as an approximation of
+ * displayed frame times. These are CPU-side frame intervals, not GPU timings.
+ *
+ * All state is accessed on the Minecraft render thread.
  */
 public final class FrameTimeMonitor {
     public static final int HISTORY_SIZE = 120;
+    private static final long STATISTICS_REFRESH_NANOS = 250_000_000L;
 
     private static final FrameTimeMonitor INSTANCE = new FrameTimeMonitor();
 
@@ -18,6 +21,10 @@ public final class FrameTimeMonitor {
     private int sampleCount;
     private int nextIndex;
     private long previousFrameNanos;
+    private long lastStatisticsUpdateNanos;
+    private double latestFrameTimeMs;
+    private double averageFrameTimeMs;
+    private double percentile95Ms;
 
     private FrameTimeMonitor() {
     }
@@ -36,50 +43,56 @@ public final class FrameTimeMonitor {
         if (previousFrameNanos != 0L) {
             double frameTimeMs = (now - previousFrameNanos) / 1_000_000.0;
             if (frameTimeMs > 0.0 && Double.isFinite(frameTimeMs)) {
+                latestFrameTimeMs = frameTimeMs;
                 samples[nextIndex] = frameTimeMs;
                 nextIndex = (nextIndex + 1) % HISTORY_SIZE;
                 if (sampleCount < HISTORY_SIZE) {
                     sampleCount++;
+                }
+
+                if (now - lastStatisticsUpdateNanos >= STATISTICS_REFRESH_NANOS) {
+                    refreshStatistics(now);
                 }
             }
         }
         previousFrameNanos = now;
     }
 
-    public synchronized int getSampleCount() {
-        return sampleCount;
-    }
-
-    public synchronized double getLatestFrameTimeMs() {
+    private void refreshStatistics(long now) {
         if (sampleCount == 0) {
-            return 0.0;
+            return;
         }
-        int latestIndex = (nextIndex - 1 + HISTORY_SIZE) % HISTORY_SIZE;
-        return samples[latestIndex];
-    }
 
-    public synchronized double getAverageFrameTimeMs() {
-        if (sampleCount == 0) {
-            return 0.0;
-        }
         double total = 0.0;
         for (int i = 0; i < sampleCount; i++) {
             total += samples[i];
         }
-        return total / sampleCount;
+        averageFrameTimeMs = total / sampleCount;
+
+        double[] sorted = Arrays.copyOf(samples, sampleCount);
+        Arrays.sort(sorted);
+        int percentileIndex = Math.max(0, (int) Math.ceil(sampleCount * 0.95) - 1);
+        percentile95Ms = sorted[percentileIndex];
+        lastStatisticsUpdateNanos = now;
+    }
+
+    public int getSampleCount() {
+        return sampleCount;
+    }
+
+    public double getLatestFrameTimeMs() {
+        return latestFrameTimeMs;
+    }
+
+    public double getAverageFrameTimeMs() {
+        return averageFrameTimeMs;
     }
 
     /**
-     * Returns the 95th percentile frame interval from the rolling window.
-     * A higher value indicates slower frames in the measured window.
+     * Returns the 95th percentile interval in the rolling sample window.
+     * Higher values indicate slower frames in that window.
      */
-    public synchronized double get95thPercentileMs() {
-        if (sampleCount == 0) {
-            return 0.0;
-        }
-        double[] sorted = Arrays.copyOf(samples, sampleCount);
-        Arrays.sort(sorted);
-        int index = Math.max(0, (int) Math.ceil(sampleCount * 0.95) - 1);
-        return sorted[index];
+    public double get95thPercentileMs() {
+        return percentile95Ms;
     }
 }
